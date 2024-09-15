@@ -180,7 +180,7 @@
 
 (define simple-circuit-chip
    (lambda (circuit)
-      (cadddr circuit)
+      (caddr circuit)
    )
 )
 
@@ -211,18 +211,18 @@
 ;; Pruebas
 
 (define circuit1 
-   (comp-chip
-      '(INA INB INC IND)
-      '(OUTA)
-      (complex-circuit
-         '(simple-circuit '(a b) '(e))
-         '(
-            (simple-circuit '(c d) '(f) (prim-chip chip-and))
-            (simple-circuit '(e f) '(g) (prim-chip chip-or))
+   '(comp-chip
+         (INA INB INC IND)
+         (OUTA)
+         (complex-circuit
+            (simple-circuit '(a b) '(e))
+            (
+               (simple-circuit '(c d) '(f) (prim-chip chip-and))
+               (simple-circuit '(e f) '(g) (prim-chip chip-or))
+            )
+            (a b c d)
+            (g)
          )
-         '(a b c d)
-         '(g)
-      )
    )
 )
 
@@ -259,24 +259,45 @@
       '(z)
    )
 )
+(define circuit3 
+   '(comp-chip
+         (INA INB INC IND)
+         (OUTA)
+         (complex-circuit
+            (simple-circuit (a b) (e))
+            (
+               (simple-circuit (c d) (f) (prim-chip chip-and))
+               (simple-circuit (e f) (g) (prim-chip chip-or))
+            )
+            (a b c d)
+            (g)
+         )
+   )
+)
+
+;;parser 
 
 (define parser
    (lambda (circuit)
       (cond
-         [(simple-circuit? circuit) 
-            (simple-circuit 
-               (circuit-inputs circuit) 
-               (circuit-outputs circuit) 
-               (parser (circuit-chip circuit))
-            )
-         ]
-         [(complex-circuit? circuit) (complex-circuit (parser (circuit-circuit circuit)) (map parser (circuit-circuits circuit)) (circuit-inputs circuit) (circuit-outputs circuit))]
-         [(prim-chip? circuit) (prim-chip (parser (chip-prim circuit)))]
-         [(comp-chip? circuit) (comp-chip (circuit-inputs circuit) (circuit-outputs circuit) (parser (circuit-circuit circuit)))]
-         [else (eopl:error 'parser "Circuito no válido")]
+         [(chip-and? circuit) (chip-and)]
+         [(chip-or? circuit) (chip-or)]
+         [(chip-not? circuit) (chip-not)]
+         [(chip-xor? circuit) (chip-xor)]
+         [(chip-nand? circuit) (chip-nand)]
+         [(chip-nor? circuit) (chip-nor)]
+         [(chip-xnor? circuit) (chip-xnor)]
+         [(prim-chip? circuit) (parser (chip-prim circuit))]
+         [(comp-chip? circuit) (comp-chip (comp-chip-inputs circuit) (comp-chip-outputs circuit) (parser (comp-chip-circ circuit)))]
+         [(simple-circuit? circuit) (simple-circuit (simple-circuit-inputs circuit) (simple-circuit-outputs circuit) (parser (simple-circuit-chip circuit)))]
+         [(complex-circuit? circuit) (complex-circuit (parser (complex-circuit-circuit circuit)) (map parser (complex-circuit-circuits circuit)) (complex-circuit-inputs circuit) (complex-circuit-outputs circuit))]
       )
    )
 )
 
-(parser circuit1)
 
+;; ejemplo chip prim
+
+(define chip1 '(prim-chip chip-and))
+
+;;(parser curcuit2)
