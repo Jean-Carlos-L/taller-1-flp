@@ -264,4 +264,64 @@
    )
 )
 
+;; otro ejemplo de circuito simple
+(define list-circuit3
+   (list-simple-circuit '(a b) '(e) (list-prim-chip list-chip-and))
+)
+;;define ejemplo de circuito complejo
+(define list-circuit4
+   (list-complex-circuit
+      (list-simple-circuit '(a b) '(e) (list-prim-chip list-chip-and))
+      (list
+         (list-simple-circuit '(c d) '(f) (list-prim-chip list-chip-and))
+      )
+      '(a b c d)
+      '(e f)
+   )
+)
+;; prueba de circuit comp
+(define list-circuit5 
+   (list-comp-chip
+      '(INA INB INC IND)
+      '(OUTA)
+      (list-complex-circuit
+         (list-simple-circuit '(a b) '(e) (list-prim-chip list-chip-and))
+         '(
+            (list-simple-circuit '(c d) '(f) (list-prim-chip list-chip-and))
+            (list-simple-circuit '(e f) '(g) (list-prim-chip list-chip-or))
+         )
+         '(a b c d)
+         '(g)
+      )
+   )
+)
+
+;;imprimir pruebas con dos espacios de linea entre cada uno y un encabezado
+
+(newline)
+(display "Prueba de circuito 1")
+(newline)
+(display list-circuit1)
+(newline)
+(newline)
+(display "Prueba de circuito 2")
+(newline)
+(display list-curcuit2)
+(newline)
+(newline)
+(display "Prueba de circuito 3")
+(newline)
+(display list-circuit3)
+(newline)
+(newline)
+(display "Prueba de circuito 4")
+(newline)
+(display list-circuit4)
+(newline)
+(newline)
+(display "Prueba de circuito 5")
+(newline)
+(display list-circuit5)
+(newline)
+
 (provide (all-defined-out))

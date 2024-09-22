@@ -75,7 +75,7 @@
 
 ;; Pruebas
 
-(comp-chip
+(define example1 (comp-chip
    '(INA INB INC IND)
    '(OUTA)
    (complex-circuit
@@ -97,41 +97,42 @@
       '(a b c d)
       '(g)
    )
-)
+))
 
-(complex-circuit
-   (simple-circuit 
-      '(m n o p)
-      '(e f)
-      (comp-chip
-         '(INA INB INC IND)
-         '(OUTE OUTF)
-         (complex-circuit
-            (simple-circuit '(a b) '(e) (prim-chip (chip-and)))
-            (list
-               (simple-circuit '(c d) '(f) (prim-chip (chip-and)))
-            )
-            '(a b c d)
-            '(e f)
-         )
-      )
-   )
-   (list
-      (simple-circuit
+(define example2 (complex-circuit
+      (simple-circuit 
+         '(m n o p)
          '(e f)
-         '(z)
          (comp-chip
-            '(INE INF)
-            '(OUTA)
-            (simple-circuit '(e f) '(g) (prim-chip (chip-or)))
+            '(INA INB INC IND)
+            '(OUTE OUTF)
+            (complex-circuit
+               (simple-circuit '(a b) '(e) (prim-chip (chip-and)))
+               (list
+                  (simple-circuit '(c d) '(f) (prim-chip (chip-and)))
+               )
+               '(a b c d)
+               '(e f)
+            )
          )
       )
+      (list
+         (simple-circuit
+            '(e f)
+            '(z)
+            (comp-chip
+               '(INE INF)
+               '(OUTA)
+               (simple-circuit '(e f) '(g) (prim-chip (chip-or)))
+            )
+         )
+      )
+      '(m n o p)
+      '(z)
    )
-   '(m n o p)
-   '(z)
 )
 
-(define variable (complex-circuit
+(define example3 (complex-circuit
    (simple-circuit 
       '(m n o p)
       '(e f)
@@ -162,5 +163,43 @@
    '(m n o p)
    '(z)
 ))
+
+;;ejemplo circuito simple
+(define circuit-simple-datatype (simple-circuit '(a b) '(c) (prim-chip (chip-and))))
+;;ejemplo circuito complejo
+(define circuit-complex-datatype (complex-circuit circuit-simple-datatype (list circuit-simple-datatype) '(a b) '(c)))
+
+
+(display "Example 1")
+(newline)
+(newline)
+(display example1)
+(newline)
+(newline)
+(display "Example 2")
+(newline)
+(newline)
+(display example2)
+(newline)
+(newline)
+(display "Example 3")
+(newline)
+(newline)
+(display example3)
+(newline)
+(newline)
+(display "Circuit simple")
+(newline)
+(newline)
+(display circuit-simple-datatype)
+(newline)
+(newline)
+(display "Circuit complex")
+(newline)
+(newline)
+(display circuit-complex-datatype)
+(newline)
+
+
 
 (provide (all-defined-out))

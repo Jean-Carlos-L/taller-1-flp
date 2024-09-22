@@ -290,7 +290,7 @@
 
 ;; Pruebas
 
-(comp-chip
+(define example1-procedimientos (comp-chip
    '(INA INB INC IND)
    '(OUTA)
    (complex-circuit
@@ -302,8 +302,9 @@
       '(a b c d)
       '(g)
    )
-)
+))
 
+(define example2-procedimientos 
 (complex-circuit
    '(simple-circuit 
       '(m n o p) 
@@ -334,4 +335,55 @@
    )
    '(m n o p)
    '(z)
-)
+))
+
+(define example3-procedimientos (simple-circuit '(a b) '(e) (prim-chip chip-and)))
+
+(define example4-procedimientos (complex-circuit
+   (simple-circuit '(a b) '(e) (prim-chip chip-and))
+   (list
+      (simple-circuit '(c d) '(f) (prim-chip chip-and))
+   )
+   '(a b c d)
+   '(e f)
+))
+
+(define example5-procedimientos (comp-chip
+   '(INA INB INC IND)
+   '(OUTA)
+   (complex-circuit
+      '(simple-circuit '(a b) '(e))
+      '(
+         (simple-circuit '(c d) '(f) (prim-chip chip-and))
+         (simple-circuit '(e f) '(g) (prim-chip chip-or))
+      )
+      '(a b c d)
+      '(g)
+   )
+))
+
+(display "Example 1 circuit comp: ")
+(newline)
+(display (example1-procedimientos 2)) 
+(newline)
+(newline)
+(display "Example 2 circuit complex: ")
+(newline)
+(display (example2-procedimientos 4) )
+(newline)
+(newline)
+(display "Example 3 Circuit simple: ")
+(newline)
+(display (example3-procedimientos 1))
+(newline)
+(newline)
+(display "Example 4 circuit Complex: ")
+(newline)
+(display ( example4-procedimientos 4))
+(newline)
+(newline)
+(display "Example 5 circuit comp:  ")
+(newline)
+(display (example5-procedimientos 2))
+(newline)
+(newline)

@@ -8,25 +8,6 @@
 (require  "representacion-listas.rkt")
 (require  "representacion-datatype.rkt")
 
-; (define compuerta-or list-chip-or)
-; (define compuerta-and list-chip-and)
-
-; (define pruebita (list-prim-chip compuerta-or))
-; (define pruebita2 (list-prim-chip compuerta-and))
-
-; (define test-simple-circuit (list-simple-circuit '(a b) '(c) pruebita))
-
-; (define test-chip-comp (list-comp-chip '(a b) '(c) test-simple-circuit))
-
-; (define test-complex-circuit (list-complex-circuit test-simple-circuit (list test-simple-circuit) '(a b) '(c)))
-
-;; Pruebas para datatype
-
-(define compuerta-and (chip-and))
-(define chipsito (prim-chip compuerta-and))
-(define simple-circuito (simple-circuit '(a b) '(c) chipsito))
-(define chipsito-jodido (comp-chip '(t j) '(g) simple-circuito))
-(define complex-circuito (complex-circuit simple-circuito (list simple-circuito) '(m x) '(p)))
 
 (define parser
    (lambda (circuit)
@@ -70,3 +51,78 @@
       )
    )
 )
+
+(define compuerta-or list-chip-or)
+(define compuerta-xor list-chip-xor)
+
+(define pruebita (list-prim-chip compuerta-or))
+(define pruebita2 (list-prim-chip compuerta-xor))
+
+ (define test-simple-circuit (list-simple-circuit '(a b) '(c) pruebita))
+
+ (define test-chip-comp (list-comp-chip '(a b) '(c) test-simple-circuit))
+
+(define test-complex-circuit (list-complex-circuit test-simple-circuit (list test-simple-circuit) '(a b) '(c)))
+
+;; Pruebas para unparser 
+
+(define compuerta-and (chip-and))
+(define chipsito (prim-chip compuerta-and))
+(define simple-circuito (simple-circuit '(a b) '(c) chipsito))
+(define chipsito-jodido (comp-chip '(t j) '(g) simple-circuito))
+(define complex-circuito (complex-circuit simple-circuito (list simple-circuito) '(m x) '(p)))
+(define chipsito-jodido2 (comp-chip '(h m) '(p) complex-circuito))
+
+
+;;Imprimimos las pruebas de parser y les ponemos un titulo
+
+(newline)
+(newline)
+(display "Pruebas para parser")
+(newline)
+(display "Prueba 1: ")
+(newline)
+(display (parser pruebita))
+(newline)
+(display "Prueba 2: ")
+(newline)
+(display (parser pruebita2))
+(newline)
+(display "Prueba 3: ")
+(newline)
+(display (parser test-simple-circuit))
+(newline)
+(display "Prueba 4: ")
+(newline)
+(display (parser test-chip-comp))
+(newline)
+(display "Prueba 5: ")
+(newline)
+(display (parser test-complex-circuit))
+
+;;Imprimimos las pruebas de unparser y les ponemos un titulo
+(newline)
+(newline)
+(display "Pruebas para unparser")
+(newline)
+(display "Prueba 1: ")
+(newline)
+(display (unparser chipsito))
+(newline)
+(display "Prueba 2: ")
+(newline)
+(display (unparser simple-circuito))
+(newline)
+(display "Prueba 3: ")
+(newline)
+(display (unparser chipsito-jodido))
+(newline)
+(display "Prueba 4: ")
+(newline)
+(display (unparser complex-circuito))
+(newline)
+(display "Prueba 5: ")
+(newline)
+(display (unparser chipsito-jodido2))
+(newline)
+(newline)
