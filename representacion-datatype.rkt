@@ -130,3 +130,37 @@
    '(m n o p)
    '(z)
 )
+
+(define variable (complex-circuit
+   (simple-circuit 
+      '(m n o p)
+      '(e f)
+      (comp-chip
+         '(INA INB INC IND)
+         '(OUTE OUTF)
+         (complex-circuit
+            (simple-circuit '(a b) '(e) (prim-chip (chip-and)))
+            (list
+               (simple-circuit '(c d) '(f) (prim-chip (chip-and)))
+            )
+            '(a b c d)
+            '(e f)
+         )
+      )
+   )
+   (list
+      (simple-circuit
+         '(e f)
+         '(z)
+         (comp-chip
+            '(INE INF)
+            '(OUTA)
+            (simple-circuit '(e f) '(g) (prim-chip (chip-or)))
+         )
+      )
+   )
+   '(m n o p)
+   '(z)
+))
+
+(provide (all-defined-out))
